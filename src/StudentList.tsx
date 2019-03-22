@@ -9,7 +9,7 @@ interface state {
     [key: string]: any;
 }
 
-export default class StudentList extends Component<any, state> {
+export default class StudentList extends Component<any, state, any> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -56,22 +56,30 @@ export default class StudentList extends Component<any, state> {
         };
     }
 
+    navTo = {
+        is: false,
+        path: '/studentInfo'
+    }
+
     onRowClick(event: any) {
         // const studentID: string = event.currentTarget.firstElementChild.textContent;
-        this.setState({
-            navTo: {
-                is: true,
-                path: '/studentInfo'
-            }
-        })
+        this.navTo = {
+            is: true,
+            path: '/studentInfo'
+        }
+        this.forceUpdate();
     }
 
     render() {
-        if (this.state.navTo.is) {
+        if (this.navTo.is) {
+            console.log(1,this.navTo.is)
+            this.navTo.is = false;
             return (
-                <Redirect to={this.state.navTo.path} />
+                <Redirect to={this.navTo.path} />
             )
+        } else {
+            console.log(2, this.navTo.is)
+            return <Table {...this.state} onRow={(record: any) => { return { onClick: this.onRowClick.bind(this) } }}></Table>
         }
-        return <Table {...this.state} onRow={(record: any) => { return { onClick: this.onRowClick.bind(this) } }}></Table>
     }
 }

@@ -19,6 +19,6 @@ export default class StudentInfo extends Component<any, state> {
     }
 
     render() {
-        return <Table {...this.state}></Table>
+        return <h1>asdasdas</h1>
     }
 }
