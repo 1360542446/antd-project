@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import { Button, Table } from 'antd';
-import { Redirect, BrowserRouter, Switch, Route } from 'react-router-dom';
+import { Redirect, BrowserRouter, Switch, Route, Link, withRouter } from 'react-router-dom';
 
 interface state {
     columns: object[];
-    rowKey: string;
     dataSource: object[];
     [key: string]: any;
 }
 
-export default class StudentList extends Component<any, state, any> {
+class StudentList extends Component<any, state, any> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -27,7 +26,7 @@ export default class StudentList extends Component<any, state, any> {
                 title: 'Avgpoint',
                 dataIndex: 'avgpoint',
             }],
-            rowKey: 'student_id',
+            rowKey:'student_id',
             dataSource: [{
                 student_id: '1',
                 name: 'John Brown',
@@ -48,38 +47,18 @@ export default class StudentList extends Component<any, state, any> {
                 name: 'Disabled User',
                 grade: null,
                 avgpoint: 4,
-            }],
-            navTo: {
-                is: false,
-                path: ''
-            }
+            }]
         };
     }
 
-    navTo = {
-        is: false,
-        path: '/studentInfo'
-    }
-
     onRowClick(event: any) {
-        // const studentID: string = event.currentTarget.firstElementChild.textContent;
-        this.navTo = {
-            is: true,
-            path: '/studentInfo'
-        }
-        this.forceUpdate();
+        const studentID: string = event.currentTarget.firstElementChild.textContent;
+        this.props.history.push('/studentInfo/' + studentID);
     }
 
     render() {
-        if (this.navTo.is) {
-            console.log(1,this.navTo.is)
-            this.navTo.is = false;
-            return (
-                <Redirect to={this.navTo.path} />
-            )
-        } else {
-            console.log(2, this.navTo.is)
-            return <Table {...this.state} onRow={(record: any) => { return { onClick: this.onRowClick.bind(this) } }}></Table>
-        }
+        return <Table {...this.state} onRow={(record: any) => { return { onClick: this.onRowClick.bind(this) } }}></Table>
     }
 }
+
+export default withRouter(StudentList);
