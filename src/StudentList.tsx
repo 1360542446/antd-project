@@ -17,8 +17,7 @@ class StudentList extends Component<any, state, any> {
                 dataIndex: 'student_id'
             }, {
                 title: 'Name',
-                dataIndex: 'name',
-                render: (text: string) => { return <a>{text}</a> }
+                dataIndex: 'name'
             }, {
                 title: 'Grade',
                 dataIndex: 'grade',
@@ -26,29 +25,32 @@ class StudentList extends Component<any, state, any> {
                 title: 'Avgpoint',
                 dataIndex: 'avgpoint',
             }],
-            rowKey:'student_id',
+            rowKey: 'student_id',
             dataSource: [{
                 student_id: '1',
                 name: 'John Brown',
                 grade: '32',
                 avgpoint: 1,
-            }, {
-                student_id: '2',
-                name: 'Jim Green',
-                grade: '42',
-                avgpoint: 2,
-            }, {
-                student_id: '3',
-                name: 'Joe Black',
-                grade: null,
-                avgpoint: 3,
-            }, {
-                student_id: '4',
-                name: 'Disabled User',
-                grade: null,
-                avgpoint: 4,
             }]
         };
+    }
+
+    componentWillMount() {
+        fetch('http://localhost:8080/AvgscoreServlet.json').then(response => response.json()).then(data => {
+            const items: object[] = data['items'];
+            if (items.length <= 0) return;
+            const columns = Object.keys(items[0]).map(key => {
+                return {
+                    title: key.replace(/^\w/, m => m.toUpperCase()),
+                    dataIndex: key
+                }
+            });
+
+            this.setState({
+                columns,
+                dataSource: items
+            })
+        })
     }
 
     onRowClick(event: any) {
