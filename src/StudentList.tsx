@@ -35,8 +35,8 @@ class StudentList extends Component<any, state, any> {
         };
     }
 
-    componentWillMount() {
-        fetch('http://localhost:8080/AvgscoreServlet.json').then(response => response.json()).then(data => {
+    componentDidMount() {
+        fetch('http://localhost:8080/DiscretemathSys/AvgscoreServlet').then(response => response.json()).then(data => {
             const items: object[] = data['items'];
             if (items.length <= 0) return;
             const columns = Object.keys(items[0]).map(key => {
